@@ -1,0 +1,76 @@
+import { defineLinearUnit } from "../helpers";
+import type { CategoryDefinition } from "../types";
+
+export const frequencyCategory: CategoryDefinition = {
+  id: "frequency",
+  name: "Frequency",
+  pluralName: "Frequency",
+  shortDescription: "Hertz, RPM, radians/s and more",
+  description:
+    "Frequency measures how many times an event repeats per second. Electronics and radio use hertz (Hz) and its multiples; rotating machinery (engines, drives) uses revolutions per minute (RPM); and physics sometimes expresses angular frequency in radians per second. Frequency is also the reciprocal of the period (time per cycle) — see the Radiofrequency guide for the frequency ↔ wavelength relationship.",
+  baseUnitId: "hertz",
+  icon: "AudioWaveform",
+  linear: true,
+  popularPairs: [
+    ["hertz", "rpm"],
+    ["kilohertz", "hertz"],
+  ],
+  units: [
+    defineLinearUnit({
+      id: "hertz",
+      categoryId: "frequency",
+      name: "Hertz",
+      symbol: "Hz",
+      system: "si",
+      factor: 1,
+      aliases: ["hz", "hertzs"],
+      description: "SI unit of frequency: one cycle per second.",
+      source: "SI",
+    }),
+    defineLinearUnit({
+      id: "kilohertz",
+      categoryId: "frequency",
+      name: "Kilohertz",
+      symbol: "kHz",
+      system: "si",
+      factor: 1000,
+      aliases: ["kilohertzs"],
+    }),
+    defineLinearUnit({
+      id: "megahertz",
+      categoryId: "frequency",
+      name: "Megahertz",
+      symbol: "MHz",
+      system: "si",
+      factor: 1e6,
+      aliases: ["megahertzs"],
+    }),
+    defineLinearUnit({
+      id: "gigahertz",
+      categoryId: "frequency",
+      name: "Gigahertz",
+      symbol: "GHz",
+      system: "si",
+      factor: 1e9,
+      aliases: ["gigahertzs"],
+    }),
+    defineLinearUnit({
+      id: "rpm",
+      categoryId: "frequency",
+      name: "Revolution per minute",
+      symbol: "rpm",
+      system: "other",
+      factor: 1 / 60,
+      aliases: ["revolutions per minute", "revoluciones por minuto"],
+    }),
+    defineLinearUnit({
+      id: "radian-per-second",
+      categoryId: "frequency",
+      name: "Radian per second",
+      symbol: "rad/s",
+      system: "si",
+      factor: 1 / (2 * Math.PI),
+      aliases: ["radians per second", "angular frequency"],
+    }),
+  ],
+};
