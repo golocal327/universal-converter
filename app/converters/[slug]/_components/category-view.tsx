@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { AdSlot } from "@/components/ad-slot";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ConverterWidget } from "@/components/converter/converter-widget";
@@ -52,14 +51,12 @@ export function CategoryView({ category }: { category: CategoryDefinition }) {
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">{category.description}</p>
 
       <div className="mt-8">
-        <Suspense fallback={<div className="h-64 rounded-2xl border border-border bg-surface" />}>
-          <ConverterWidget
-            categoryId={category.id}
-            defaultFromUnitId={defaultFrom}
-            defaultToUnitId={defaultTo}
-            showConvertToAll
-          />
-        </Suspense>
+        <ConverterWidget
+          categoryId={category.id}
+          defaultFromUnitId={defaultFrom}
+          defaultToUnitId={defaultTo}
+          showConvertToAll
+        />
       </div>
 
       <div className="mt-6">

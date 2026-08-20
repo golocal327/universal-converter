@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeftRight, Star } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { CopyButton } from "@/components/converter/copy-button";
 import { PrecisionSelect } from "@/components/converter/precision-select";
@@ -27,30 +27,46 @@ export function ConverterWidget({
   showConvertToAll?: boolean;
 }) {
   const units = useMemo(() => getUnitsInCategory(categoryId), [categoryId]);
-  const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Lazy initializers read ?value=&from=&to=&precision= once, at first render, so shared
-  // links open pre-filled. This component only ever renders inside a Suspense boundary
-  // (required by useSearchParams), so there's no SSR output to mismatch here — no effect needed.
-  const [fromUnitId, setFromUnitId] = useState(() => {
-    const urlFrom = searchParams.get("from");
-    return urlFrom && units.some((u) => u.id === urlFrom) ? urlFrom : defaultFromUnitId;
-  });
-  const [toUnitId, setToUnitId] = useState(() => {
-    const urlTo = searchParams.get("to");
-    return urlTo && units.some((u) => u.id === urlTo) ? urlTo : defaultToUnitId;
-  });
-  const [rawValue, setRawValue] = useState(() => searchParams.get("value") ?? String(defaultValue));
-  const [precision, setPrecision] = useState<PrecisionMode>(() => {
-    const urlPrecision = searchParams.get("precision");
-    if (!urlPrecision) return "auto";
-    const numeric = Number(urlPrecision);
-    return Number.isNaN(numeric) ? (urlPrecision as PrecisionMode) : (numeric as PrecisionMode);
-  });
+  // Plain defaults keep server and first-client render identical (no hydration
+  // mismatch, no Suspense/dynamic-API requirement). Shared-link values
+  // (?value=&from=&to=&precision=) are picked up from window.location right
+  // after mount instead — deliberately NOT via next/navigation's
+  // useSearchParams(), which forces this component's whole subtree through
+  // Next's dynamic-API Suspense/streaming-reveal machinery. That machinery is
+  // what produced an unreliable "content never reveals" failure in local dev
+  // (next dev / Turbopack) — the production build was unaffected, but reading
+  // the URL by hand sidesteps the framework code path entirely and is just as
+  // correct for a purely client-interactive widget like this one.
+  const [fromUnitId, setFromUnitId] = useState(defaultFromUnitId);
+  const [toUnitId, setToUnitId] = useState(defaultToUnitId);
+  const [rawValue, setRawValue] = useState(String(defaultValue));
+  const [precision, setPrecision] = useState<PrecisionMode>("auto");
   const [showAll, setShowAll] = useState(showConvertToAll);
   const { isFavorite, toggle } = useFavorites();
   const { record } = useConversionHistory();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlFrom = params.get("from");
+    const urlTo = params.get("to");
+    const urlValue = params.get("value");
+    const urlPrecision = params.get("precision");
+    if (!urlFrom && !urlTo && !urlValue && !urlPrecision) return;
+
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (urlFrom && units.some((u) => u.id === urlFrom)) setFromUnitId(urlFrom);
+    if (urlTo && units.some((u) => u.id === urlTo)) setToUnitId(urlTo);
+    if (urlValue) setRawValue(urlValue);
+    if (urlPrecision) {
+      const numeric = Number(urlPrecision);
+      setPrecision(Number.isNaN(numeric) ? (urlPrecision as PrecisionMode) : (numeric as PrecisionMode));
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+    // Intentionally run only once on mount — this hydrates from a shared URL, not user edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const numericValue = parseLocaleNumber(rawValue);
 

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { AdSlot } from "@/components/ad-slot";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ConversionTable } from "@/components/conversion-table";
@@ -30,9 +29,7 @@ export function ConversionView({ definition }: { definition: ConversionPageDefin
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">{content.intro}</p>
 
       <div className="mt-8">
-        <Suspense fallback={<div className="h-64 rounded-2xl border border-border bg-surface" />}>
-          <ConverterWidget categoryId={category.id} defaultFromUnitId={fromUnit.id} defaultToUnitId={toUnit.id} defaultValue={1} />
-        </Suspense>
+        <ConverterWidget categoryId={category.id} defaultFromUnitId={fromUnit.id} defaultToUnitId={toUnit.id} defaultValue={1} />
       </div>
 
       <div className="mt-6">

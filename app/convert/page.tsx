@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FavoritesHistoryPanel } from "@/components/converter/favorites-history-panel";
 import { UniversalConverter } from "@/components/converter/universal-converter";
@@ -21,14 +20,10 @@ export default function ConvertPage() {
       </p>
 
       <div className="mt-8">
-        <Suspense fallback={<div className="h-80 rounded-2xl border border-border bg-surface" />}>
-          <UniversalConverter />
-        </Suspense>
+        <UniversalConverter />
       </div>
 
-      <Suspense fallback={null}>
-        <FavoritesHistoryPanel />
-      </Suspense>
+      <FavoritesHistoryPanel />
     </div>
   );
 }
