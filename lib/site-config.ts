@@ -11,6 +11,13 @@ export const siteConfig = {
 };
 
 export const adsenseConfig = {
+  // The site-ownership verification tag Google's AdSense onboarding asks you to
+  // paste into <head> ("ca-pub-..."). This is separate from `client` below: the
+  // verification tag can be published as soon as the account exists, while
+  // `client`/`slots` (which actually turn ad units on) should stay unset until
+  // slot IDs exist too. Falls back to the account ID the user provided directly
+  // so the tag ships even before NEXT_PUBLIC_ADSENSE_ACCOUNT is set on Vercel.
+  account: process.env.NEXT_PUBLIC_ADSENSE_ACCOUNT || "ca-pub-4834969820835281",
   client: process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "",
   slots: {
     top: process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP ?? "",

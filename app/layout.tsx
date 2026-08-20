@@ -40,6 +40,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
+  other: {
+    "google-adsense-account": adsenseConfig.account,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
