@@ -11,7 +11,7 @@ export function WireMark({ className }: { className?: string }) {
 
 export function WireLogo({ className }: { className?: string }) {
   return (
-    <span className={cn("flex items-center gap-2 font-semibold tracking-tight", className)}>
+    <span className={cn("flex items-center gap-2 font-semibold tracking-tight whitespace-nowrap", className)}>
       <WireMark />
       <span>
         WIRE <span className="font-normal text-muted-foreground">Sales OS</span>

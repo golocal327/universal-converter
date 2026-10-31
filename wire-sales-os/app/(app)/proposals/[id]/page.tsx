@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProposalToolbar } from "@/components/proposals/proposal-toolbar";
 import { getWorkspaceContext } from "@/lib/auth/session";
-import { formatDate } from "@/lib/format";
 import type { ProposalContent } from "@/lib/outreach/generators";
 import { loadSettings } from "@/lib/services/settings";
 
 export const metadata: Metadata = { title: "Proposal" };
 
+const dateEs = (v: string) => new Date(v).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
 const eur = (v: number) => new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
 
 export default async function ProposalPage({ params }: PageProps<"/proposals/[id]">) {
@@ -31,13 +31,13 @@ export default async function ProposalPage({ params }: PageProps<"/proposals/[id
           <div>
             <p className="text-sm font-semibold tracking-tight">{settings.branding.companyName || "WIRE"}</p>
             <h1 className="mt-6 text-3xl font-semibold tracking-tight">{c.title}</h1>
-            <p className="mt-2 text-sm text-muted-foreground">{company?.name}{company?.city ? ` · ${company.city}` : ""} · {formatDate(p.created_at, { day: "numeric", month: "long", year: "numeric" })}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{company?.name}{company?.city ? ` · ${company.city}` : ""} · {dateEs(p.created_at)}</p>
           </div>
           <div className="text-right text-xs text-muted-foreground">
             {settings.branding.senderName && <p>{settings.branding.senderName}</p>}
             {settings.branding.senderEmail && <p>{settings.branding.senderEmail}</p>}
             {settings.branding.senderPhone && <p>{settings.branding.senderPhone}</p>}
-            {p.valid_until && <p className="mt-2">Válida hasta {formatDate(p.valid_until, { day: "numeric", month: "long", year: "numeric" })}</p>}
+            {p.valid_until && <p className="mt-2">Válida hasta {dateEs(p.valid_until)}</p>}
           </div>
         </header>
         <p className="mt-8 text-[15px] leading-relaxed">{c.intro}</p>

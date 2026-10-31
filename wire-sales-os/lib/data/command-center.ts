@@ -100,8 +100,8 @@ export async function getCommandCenter(actor: Actor, now = new Date()): Promise<
 }
 
 /** Deterministic daily briefing text (the AI version rewrites this, it never replaces the data). */
-export function buildBriefing(cc: CommandCenter, name: string, now = new Date()) {
-  const hour = now.getHours();
+export function buildBriefing(cc: CommandCenter, name: string, timeZone = "Europe/Madrid", now = new Date()) {
+  const hour = Number(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hour12: false, timeZone }).format(now));
   const greeting = `${hour < 13 ? "Good morning" : hour < 20 ? "Good afternoon" : "Good evening"}${name ? `, ${name}` : ""}.`;
   return {
     greeting,

@@ -5,7 +5,7 @@ import { Menu, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { CommandPalette, OPEN_PALETTE_EVENT } from "./command-palette";
-import { WireLogo } from "./logo";
+import { WireMark } from "./logo";
 import { Sidebar, type SidebarProps } from "./sidebar";
 
 /** App chrome: fixed sidebar on desktop, sheet on mobile, slim top bar with search. */
@@ -28,7 +28,7 @@ export function AppFrame({ children, ...sidebar }: SidebarProps & { children: Re
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open navigation">
             <Menu />
           </Button>
-          <Link href="/" className="lg:hidden"><WireLogo className="text-sm" /></Link>
+          <Link href="/" className="shrink-0 lg:hidden" aria-label="WIRE Sales OS home"><WireMark className="size-7" /></Link>
           <button
             type="button"
             onClick={openPalette}

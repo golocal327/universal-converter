@@ -169,8 +169,8 @@ export default async function CompanyPage({ params, searchParams }: PageProps<"/
               </Section>
             </div>
             <aside className="space-y-6">
-              <Section title={`Lead score ${lead?.score ?? "—"}/100`} description="Every point is explained">
-                <div className="p-4"><ScoreBreakdown factors={ctx.lead?.factors ?? []} /></div>
+              <Section title={`Lead score ${lead?.score ?? "—"}/100`} description="Every point is explained; categories are capped">
+                <div className="p-4"><ScoreBreakdown factors={ctx.lead?.factors ?? []} score={lead?.score} /></div>
               </Section>
               <Section title="Contact & presence">
                 <ul className="space-y-2.5 p-4">

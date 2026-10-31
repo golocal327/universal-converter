@@ -17,7 +17,7 @@ export function OnboardingForm({ defaultSender }: { defaultSender: string }) {
         <Checkbox id="demo" name="demo" defaultChecked />
         <div className="grid gap-0.5">
           <Label htmlFor="demo">Load demo data</Label>
-          <p className="text-xs text-muted-foreground">35 fictitious businesses with audits, deals, campaigns and tasks. Remove them anytime in Settings → Data.</p>
+          <p className="text-xs text-muted-foreground">34 fictitious businesses with audits, deals, campaigns and tasks. Remove them anytime in Settings → Data.</p>
         </div>
       </div>
       {state?.error && <p role="alert" className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">{state.error}</p>}

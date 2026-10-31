@@ -15,7 +15,7 @@ import { fail, ok, type ActionResult } from "@/lib/services/types";
 
 const optionalText = (max: number) => z.string().trim().max(max).optional().or(z.literal("")).transform((v) => v || undefined);
 
-export const createLeadSchema = z.object({
+const createLeadSchema = z.object({
   company_name: z.string().trim().min(1, "Company name is required").max(200),
   sector: optionalText(120),
   city: optionalText(120),

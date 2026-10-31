@@ -119,10 +119,10 @@ export function NewLeadForm({ sectors }: { sectors: { id: string; name: string }
       <fieldset className="grid gap-4">
         <legend className="mb-1 text-sm font-semibold">Primary contact</legend>
         <div className="grid gap-4 sm:grid-cols-2">
-          {text("contact_name", "Name")}
-          {text("contact_role", "Role", { placeholder: "Owner, Director…" })}
-          {text("contact_email", "Email", { type: "email" })}
-          {text("contact_phone", "Phone", { type: "tel" })}
+          {text("contact_name", "Contact name")}
+          {text("contact_role", "Contact role", { placeholder: "Owner, Director…" })}
+          {text("contact_email", "Contact email", { type: "email" })}
+          {text("contact_phone", "Contact phone", { type: "tel" })}
         </div>
         <FormField id="notes" label="Notes">
           <Textarea id="notes" rows={3} {...register("notes")} />

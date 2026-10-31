@@ -20,7 +20,7 @@ export default async function CommandCenterPage() {
   const { user, workspace } = await getWorkspaceContext();
   const cc = await getCommandCenter(await getActor());
   const firstName = ((user.user_metadata?.full_name as string | undefined) ?? "").split(" ")[0];
-  const briefing = buildBriefing(cc, firstName);
+  const briefing = buildBriefing(cc, firstName, workspace.timezone);
   const a = cc.attention;
   const attention = [
     { icon: Flame, value: a.hotLeads, label: "hot leads not contacted", href: "/leads?priority=hot&contact=not_contacted", tone: "text-hot" },

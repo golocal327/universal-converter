@@ -50,8 +50,8 @@ export default async function AnalyticsPage({ searchParams }: PageProps<"/analyt
           </Section>
           <Section title="Performance" description={`Per day, last ${days} days`}>
             <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3">
-              <ColumnSeries title="Contacts / day" data={a.series.map((s) => ({ day: s.day, value: s.contacts }))} total={`${(contacts / days).toFixed(1)}/day`} />
-              <ColumnSeries title="Replies / day" data={a.series.map((s) => ({ day: s.day, value: s.replies }))} total={`${(replies / days).toFixed(1)}/day`} />
+              <ColumnSeries title="Contacts" data={a.series.map((s) => ({ day: s.day, value: s.contacts }))} total={`${(contacts / days).toFixed(1)}/day`} />
+              <ColumnSeries title="Replies" data={a.series.map((s) => ({ day: s.day, value: s.replies }))} total={`${(replies / days).toFixed(1)}/day`} />
               <ColumnSeries title="Meetings" data={a.series.map((s) => ({ day: s.day, value: s.meetings }))} total={`${((meetings / days) * 7).toFixed(1)}/week`} />
               <ColumnSeries title="Proposals" data={a.series.map((s) => ({ day: s.day, value: s.proposals }))} />
               <ColumnSeries title="Sales" data={a.series.map((s) => ({ day: s.day, value: s.sales }))} />
@@ -60,10 +60,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps<"/analyt
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Section title="Revenue by sector"><BarList caption="Revenue by sector" data={revenue(a.revenue_by_sector)} format={(v) => formatCurrency(v, true)} emptyLabel="No won deals in this period" /></Section>
-          <Section title="Revenue by service"><BarList caption="Revenue by service" data={revenue(a.revenue_by_service)} format={(v) => formatCurrency(v, true)} emptyLabel="No won deals in this period" /></Section>
-          <Section title="Revenue by campaign"><BarList caption="Revenue by campaign" data={revenue(a.revenue_by_campaign)} format={(v) => formatCurrency(v, true)} emptyLabel="No won deals in this period" /></Section>
-          <Section title="Revenue by city"><BarList caption="Revenue by city" data={revenue(a.revenue_by_city)} format={(v) => formatCurrency(v, true)} emptyLabel="No won deals in this period" /></Section>
+          <Section title="Revenue by sector"><BarList caption="Revenue by sector" data={revenue(a.revenue_by_sector)} format="currency" emptyLabel="No won deals in this period" /></Section>
+          <Section title="Revenue by service"><BarList caption="Revenue by service" data={revenue(a.revenue_by_service)} format="currency" emptyLabel="No won deals in this period" /></Section>
+          <Section title="Revenue by campaign"><BarList caption="Revenue by campaign" data={revenue(a.revenue_by_campaign)} format="currency" emptyLabel="No won deals in this period" /></Section>
+          <Section title="Revenue by city"><BarList caption="Revenue by city" data={revenue(a.revenue_by_city)} format="currency" emptyLabel="No won deals in this period" /></Section>
         </div>
       </PageBody>
     </>

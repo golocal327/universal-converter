@@ -82,7 +82,7 @@ export type ScoringConfig = {
   warmThreshold?: number;
 };
 
-const CATEGORY_CAPS: Record<Exclude<ScoreCategory, "penalty">, number> = {
+export const CATEGORY_CAPS: Record<Exclude<ScoreCategory, "penalty">, number> = {
   website: 45,
   google: 30,
   social: 12,

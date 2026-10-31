@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv, isSupabaseConfigured } from "@/lib/env";
 
-const PUBLIC_PATHS = ["/login", "/signup", "/auth", "/setup", "/api/v1", "/api/health"];
+const PUBLIC_PATHS = ["/login", "/signup", "/auth", "/setup", "/api/v1", "/api/health", "/api/cron"];
 
 /**
  * Refreshes the Supabase session cookie on every request and performs the

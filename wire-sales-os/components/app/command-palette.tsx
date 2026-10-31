@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useTheme } from "next-themes";
 import { Building2, CheckSquare, FileText, Loader2, Mail, Megaphone, Moon, Plus, Sparkles, User } from "lucide-react";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -83,6 +84,7 @@ export function CommandPalette() {
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen} title="Command palette" description="Search or run a command">
+      <Command>
       <CommandInput placeholder="Search companies, contacts, campaigns… or type a command" value={query} onValueChange={setQuery} />
       <CommandList>
         <CommandEmpty>{pending ? <Loader2 className="mx-auto size-4 animate-spin" /> : "No results."}</CommandEmpty>
@@ -143,6 +145,7 @@ export function CommandPalette() {
           ))}
         </CommandGroup>
       </CommandList>
+      </Command>
     </CommandDialog>
   );
 }

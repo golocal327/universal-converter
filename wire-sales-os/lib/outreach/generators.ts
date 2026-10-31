@@ -1,5 +1,5 @@
 import type { EmailVariant } from "@/lib/domain/constants";
-import { detectProblems, firstName, formatEuro, type DetectedProblem, type LeadContext } from "./context";
+import { detectProblems, firstName, formatEuro, formatNumberEs, type DetectedProblem, type LeadContext } from "./context";
 
 /**
  * Rules-based generation engine. Produces personalised outreach from real
@@ -87,9 +87,9 @@ function signature(ctx: LeadContext) {
 function demandSentence(ctx: LeadContext): string | null {
   const reviews = ctx.company.google_reviews_count ?? 0;
   if (reviews >= 50 && ctx.company.google_rating) {
-    return `Con ${reviews} reseñas y un ${ctx.company.google_rating.toString().replace(".", ",")} en Google está claro que la demanda existe; el problema es que parte de esa gente no termina contactando.`;
+    return `Con ${formatNumberEs(reviews)} reseñas y un ${formatNumberEs(ctx.company.google_rating)} en Google está claro que la demanda existe; el problema es que parte de esa gente no termina contactando.`;
   }
-  if (reviews >= 20) return `Tenéis ${reviews} reseñas en Google, así que la gente os busca; ahora toca que esa búsqueda termine en contacto.`;
+  if (reviews >= 20) return `Tenéis ${formatNumberEs(reviews)} reseñas en Google, así que la gente os busca; ahora toca que esa búsqueda termine en contacto.`;
   return null;
 }
 
@@ -265,7 +265,7 @@ export function buildProposal(ctx: LeadContext): ProposalContent {
   const situation: string[] = [];
   if (c.website) situation.push(`Web actual: ${c.website}${ctx.audit?.overall !== null && ctx.audit?.overall !== undefined && ctx.audit.status === "completed" ? ` — puntuación de auditoría ${ctx.audit.overall}/100 (rendimiento ${ctx.audit.performance}, SEO ${ctx.audit.seo}, UX ${ctx.audit.ux}, conversión ${ctx.audit.conversion}, móvil ${ctx.audit.mobile}).` : "."}`);
   else situation.push("Actualmente el negocio no dispone de una web propia.");
-  if (c.google_reviews_count) situation.push(`Reputación en Google: ${c.google_reviews_count} reseñas${c.google_rating ? ` con una media de ${c.google_rating}★` : ""}.`);
+  if (c.google_reviews_count) situation.push(`Reputación en Google: ${formatNumberEs(c.google_reviews_count)} reseñas${c.google_rating ? ` con una media de ${formatNumberEs(c.google_rating)}★` : ""}.`);
   if (c.instagram_url) situation.push("Presencia activa en Instagram.");
 
   const features = new Set<string>([
@@ -283,7 +283,7 @@ export function buildProposal(ctx: LeadContext): ProposalContent {
     title: `Propuesta para ${c.name}`,
     intro: `Esta propuesta resume el análisis de la presencia digital de ${c.name} y el plan de WIRE para convertir la demanda que ya tenéis en más clientes.`,
     currentSituation: situation,
-    problems: a.problems.slice(0, 5).map((p) => ({ title: p.title, detail: `${p.sentence.charAt(0).toUpperCase()}${p.sentence.slice(1)}. ${p.impact}` })),
+    problems: a.problems.slice(0, 5).map((p) => ({ title: p.titleEs, detail: `${p.sentence.charAt(0).toUpperCase()}${p.sentence.slice(1)}. ${p.impact}` })),
     opportunities: [...a.whyNow, ...(ctx.sector?.sales_arguments ?? []).slice(0, 2)],
     solution: { name: a.recommendedOffer.name, description: a.recommendedOffer.reason },
     features: [...features],

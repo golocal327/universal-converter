@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Table2, BarChart3 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { formatCurrency, formatNumber } from "@/lib/format";
 
 export type BarDatum = { label: string; value: number; detail?: string };
 
@@ -10,9 +11,11 @@ export type BarDatum = { label: string; value: number; detail?: string };
  * 20px bars, 4px rounded data-end, square at the baseline, value at the tip,
  * hover tooltip and a table view for accessibility.
  */
-export function BarList({ data, format = (v) => String(v), emptyLabel = "No data yet", caption }: {
-  data: BarDatum[]; format?: (v: number) => string; emptyLabel?: string; caption: string;
+/** `format` is a name (not a function) so the component can be rendered from Server Components. */
+export function BarList({ data, format: kind = "number", emptyLabel = "No data yet", caption }: {
+  data: BarDatum[]; format?: "currency" | "number"; emptyLabel?: string; caption: string;
 }) {
+  const format = (v: number) => (kind === "currency" ? formatCurrency(v, true) : formatNumber(v));
   const [asTable, setAsTable] = useState(false);
   const max = Math.max(1, ...data.map((d) => d.value));
   if (!data.length) return <p className="px-4 py-8 text-center text-sm text-muted-foreground">{emptyLabel}</p>;
