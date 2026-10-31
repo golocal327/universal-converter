@@ -245,7 +245,9 @@ await check("public Lead API with API key", async () => {
   await visit("/settings?tab=automation", "Public Lead API");
   await page.getByPlaceholder("Key name (e.g. n8n production)").fill("E2E key");
   await page.getByRole("button", { name: "Create API key" }).click();
-  const key = (await page.locator("code").filter({ hasText: /^wire_/ }).first().innerText()).trim();
+  const secretBox = page.locator("div").filter({ hasText: /^API key — copy it now/ }).last();
+  await secretBox.waitFor();
+  const key = (await secretBox.locator("code").innerText()).trim();
   const call = (k, body) => fetch(`${BASE}/api/v1/leads`, { method: "POST", headers: { Authorization: `Bearer ${k}`, "Content-Type": "application/json" }, body: JSON.stringify(body) });
   const bad = await call("wire_invalidinvalidinvalidinvalid", { leads: [{ company_name: "x" }] });
   if (bad.status !== 401) throw new Error(`Invalid key should be 401, got ${bad.status}`);
