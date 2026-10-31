@@ -4,6 +4,8 @@
 
 Live architecture goals: SEO-first, mobile-first, AdSense-ready, and designed to scale from ~250 conversion pages today to thousands without the codebase becoming unmanageable.
 
+> **Also in this repository:** [`wire-sales-os/`](wire-sales-os/README.md) — WIRE Sales OS, a separate Next.js app (sales intelligence + CRM) with its own dependencies and deployment (Vercel root directory `wire-sales-os`). It does not affect this site's build.
+
 ## Table of contents
 
 - [Architecture](#architecture)
