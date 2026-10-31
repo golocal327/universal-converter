@@ -51,3 +51,8 @@ export function formatRelative(value: string | Date | null | undefined, now = ne
 export function isOverdue(value: string | null | undefined, now = new Date()) {
   return Boolean(value) && new Date(value as string).getTime() < now.getTime();
 }
+
+/** ISO timestamp `days` days before now (server components compute per request). */
+export function isoDaysAgo(days: number, now = new Date()) {
+  return new Date(now.getTime() - days * DAY).toISOString();
+}

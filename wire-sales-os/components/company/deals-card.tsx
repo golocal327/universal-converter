@@ -63,7 +63,7 @@ export function DealsCard({ companyId, deals, stages }: { companyId: string; dea
   );
 }
 
-export function DealEditDialog({ deal, onClose }: { deal: Pick<DealRow, "id" | "title" | "setup_value" | "monthly_value" | "probability" | "expected_close_date" | "next_action">; onClose: () => void }) {
+export function DealEditDialog({ deal, onClose, footerExtra }: { deal: Pick<DealRow, "id" | "title" | "setup_value" | "monthly_value" | "probability" | "expected_close_date" | "next_action">; onClose: () => void; footerExtra?: React.ReactNode }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [v, setV] = useState({
@@ -96,7 +96,7 @@ export function DealEditDialog({ deal, onClose }: { deal: Pick<DealRow, "id" | "
           {f("expected_close_date", "Expected close", "date")}
           <div className="sm:col-span-2">{f("next_action", "Next action")}</div>
         </div>
-        <DialogFooter><Button onClick={save} disabled={pending}>{pending && <Loader2 className="animate-spin" />} Save</Button></DialogFooter>
+        <DialogFooter>{footerExtra}<Button onClick={save} disabled={pending}>{pending && <Loader2 className="animate-spin" />} Save</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   );
