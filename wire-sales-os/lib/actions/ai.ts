@@ -1,8 +1,9 @@
 "use server";
 import { z } from "zod";
 import { AINotConfiguredError, AIRefusalError, isAIConfigured } from "@/lib/ai";
-import { COPILOT_SYSTEM, emailVariantsSchema, leadAnalysisSchema, leadDataBlock, whatsappSchema, type LeadAnalysis } from "@/lib/ai/prompts";
+import { briefingSchema, COPILOT_SYSTEM, emailVariantsSchema, leadAnalysisSchema, leadDataBlock, whatsappSchema, type LeadAnalysis } from "@/lib/ai/prompts";
 import { getActor, withinRateLimit } from "@/lib/auth/actor";
+import { getCommandCenter } from "@/lib/data/command-center";
 import { analyzeOpportunity } from "@/lib/outreach/generators";
 import { logActivity } from "@/lib/services/activity";
 import { runAIObject, runAIText } from "@/lib/services/ai";
@@ -127,6 +128,31 @@ export async function aiGenerateWhatsApp(companyId: string): Promise<ActionResul
     );
     await logActivity(actor, { type: "whatsapp_generated", title: "WhatsApp messages generated with AI", companyId, leadId: ctx.lead?.id ?? null });
     return ok({ messages: result.object.messages, generationId: result.generationId });
+  } catch (error) {
+    return aiError(error);
+  }
+}
+
+/** Daily briefing rewritten by AI from the same Command Center data (never invents leads). */
+export async function aiDailyBriefing(): Promise<ActionResult<{ greeting: string; priorities: { company: string; score: number; reason: string; action: string }[]; notes: string[] }>> {
+  if (!isAIConfigured()) return fail("AI is not configured.");
+  const actor = await getActor();
+  if (!(await withinRateLimit(actor, "ai", AI_LIMIT, 3600))) return fail("AI limit reached (60 requests per hour).");
+  const cc = await getCommandCenter(actor);
+  try {
+    const result = await runAIObject(
+      actor,
+      { kind: "daily_briefing" },
+      {
+        system: `${COPILOT_SYSTEM}\n\nToday's data:\n<command_center>\n${JSON.stringify({ attention: cc.attention, top_leads: cc.topLeads, sellable: cc.sellable, performance: cc.performance })}\n</command_center>`,
+        messages: [{ role: "user", content: "Write my daily sales briefing in English: a one-line greeting, the 3-5 leads I should prioritize today (only from top_leads, with score, a concrete reason and the action), and 2-4 short notes on follow-ups, meetings, pipeline and what to improve this week based on performance." }],
+        effort: "low",
+        maxTokens: 4000,
+      },
+      briefingSchema,
+      "daily_briefing",
+    );
+    return ok(result.object);
   } catch (error) {
     return aiError(error);
   }

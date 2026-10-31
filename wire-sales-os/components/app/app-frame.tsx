@@ -14,7 +14,7 @@ export function AppFrame({ children, ...sidebar }: SidebarProps & { children: Re
   const openPalette = () => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT));
   return (
     <div className="flex min-h-svh">
-      <aside className="sticky top-0 hidden h-svh w-60 shrink-0 border-r border-sidebar-border lg:block">
+      <aside className="sticky top-0 hidden h-svh w-60 shrink-0 border-r border-sidebar-border lg:block print:hidden">
         <Sidebar {...sidebar} />
       </aside>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
