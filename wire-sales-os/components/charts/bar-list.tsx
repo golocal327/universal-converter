@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Table2, BarChart3 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 export type BarDatum = { label: string; value: number; detail?: string };
 

@@ -36,7 +36,7 @@ export function TaskList({ tasks, showCompany = true, newTaskDefaults, emptyLabe
       router.refresh();
     });
 
-  const blank: TaskDraft = { title: "", description: null, type: "follow_up", priority: "medium", due_at: new Date(Date.now() + 86_400_000).toISOString(), company_id: null, ...newTaskDefaults };
+  const blank = (): TaskDraft => ({ title: "", description: null, type: "follow_up", priority: "medium", due_at: new Date(Date.now() + 86_400_000).toISOString(), company_id: null, ...newTaskDefaults });
 
   return (
     <div>
@@ -72,7 +72,7 @@ export function TaskList({ tasks, showCompany = true, newTaskDefaults, emptyLabe
           })}
         </ul>
       )}
-      {newTaskDefaults && <Button size="sm" variant="ghost" className="mt-1" onClick={() => setEditing(blank)}><Plus /> Add task</Button>}
+      {newTaskDefaults && <Button size="sm" variant="ghost" className="mt-1" onClick={() => setEditing(blank())}><Plus /> Add task</Button>}
       {editing && <TaskDialog key={editing.id ?? "new"} open onOpenChange={(o) => !o && setEditing(null)} initial={editing} lockCompany={Boolean(newTaskDefaults?.company_id)} />}
     </div>
   );

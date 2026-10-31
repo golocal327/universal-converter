@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -46,14 +46,15 @@ type Values = z.infer<typeof schema>;
 export function NewLeadForm({ sectors }: { sectors: { id: string; name: string }[] }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const { register, handleSubmit, setValue, watch, setError, formState: { errors } } = useForm<Values>({
+  const { register, handleSubmit, setValue, control, setError, formState: { errors } } = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: {
       company_name: "", sector: "", city: "", province: "", address: "", phone: "", email: "", website: "", instagram: "", facebook: "", linkedin: "",
       google_maps_url: "", rating: "", reviews: "", employees: "", description: "", contact_name: "", contact_role: "", contact_email: "", contact_phone: "", notes: "", audit_now: true,
     },
   });
-  const website = watch("website");
+  const website = useWatch({ control, name: "website" });
+  const auditNow = useWatch({ control, name: "audit_now" });
 
   const onSubmit = (values: Values) =>
     startTransition(async () => {
@@ -130,7 +131,7 @@ export function NewLeadForm({ sectors }: { sectors: { id: string; name: string }
 
       <div className="flex flex-wrap items-center justify-between gap-4 border-t pt-6">
         <label className="flex items-center gap-2 text-sm">
-          <Checkbox checked={watch("audit_now")} disabled={!website} onCheckedChange={(v) => setValue("audit_now", v === true)} />
+          <Checkbox checked={auditNow} disabled={!website} onCheckedChange={(v) => setValue("audit_now", v === true)} />
           Audit the website right after creating
         </label>
         <div className="flex gap-2">

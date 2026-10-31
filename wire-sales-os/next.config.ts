@@ -11,7 +11,11 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // This app lives in a subdirectory of another repository; pin the root so
   // Turbopack does not pick up the parent lockfile.
-  turbopack: { root: path.resolve(__dirname) },
+  turbopack: {
+    root: path.resolve(__dirname),
+    // Tailwind CSS v4 via its Turbopack loader (resolves `@import "tw-animate-css"` etc.).
+    rules: { "*.css": { loaders: ["@tailwindcss/turbopack"], as: "*.css" } },
+  },
   poweredByHeader: false,
   experimental: {
     serverActions: {

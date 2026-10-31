@@ -38,7 +38,8 @@ function chunks<T>(arr: T[], size = CHUNK): T[][] {
   return out;
 }
 
-async function loadExisting(actor: Actor, leads: NormalizedLead[]): Promise<ExistingRecord[]> {
+/** Existing companies that share any dedupe key with the given leads. */
+export async function loadExisting(actor: Actor, leads: NormalizedLead[]): Promise<ExistingRecord[]> {
   const domains = [...new Set(leads.map((l) => l.domain).filter((v): v is string => Boolean(v)))];
   const phones = [...new Set(leads.map((l) => l.phone_normalized).filter((v): v is string => Boolean(v)))];
   const emails = [...new Set(leads.map((l) => l.email).filter((v): v is string => Boolean(v)))];

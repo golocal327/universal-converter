@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { FormField } from "@/components/forms/field";
@@ -42,11 +42,13 @@ export function EditCompanySheet({ open, onOpenChange, company, sectors }: {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const toStr = (v: unknown) => (v === null || v === undefined ? "" : String(v));
-  const { register, handleSubmit, setValue, watch, setError, formState: { errors } } = useForm<Values>({
+  const { register, handleSubmit, setValue, control, setError, formState: { errors } } = useForm<Values>({
     defaultValues: {
       ...(Object.fromEntries(Object.entries(company).map(([k, v]) => [k, Array.isArray(v) ? v.join(", ") : toStr(v)])) as Values),
     },
   });
+
+  const sectorId = useWatch({ control, name: "sector_id" });
 
   const onSubmit = (v: Values) =>
     startTransition(async () => {
@@ -70,7 +72,7 @@ export function EditCompanySheet({ open, onOpenChange, company, sectors }: {
         </SheetHeader>
         <form id="edit-company" onSubmit={handleSubmit(onSubmit)} className="grid gap-4 px-4 sm:grid-cols-2">
           <FormField id="sector_id" label="Sector" className="sm:col-span-2">
-            <Select value={watch("sector_id") || "none"} onValueChange={(v) => setValue("sector_id", v === "none" ? "" : v)}>
+            <Select value={sectorId || "none"} onValueChange={(v) => setValue("sector_id", v === "none" ? "" : v)}>
               <SelectTrigger id="sector_id" className="w-full"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No sector</SelectItem>
