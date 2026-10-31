@@ -5,7 +5,12 @@ import path from "node:path";
 // and exercise RLS, triggers and SQL functions. Requires TEST_DATABASE_URL
 // (defaults to a local postgres superuser connection).
 export default defineConfig({
-  resolve: { alias: { "@": path.resolve(__dirname, ".") } },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "."),
+      "server-only": path.resolve(__dirname, "tests/stubs/empty.ts"),
+    },
+  },
   test: {
     environment: "node",
     include: ["tests/db/**/*.test.ts"],

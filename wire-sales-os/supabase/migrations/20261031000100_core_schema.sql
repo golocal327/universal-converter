@@ -216,6 +216,8 @@ create table public.companies (
   opening_hours text,
   growth_signals text[] not null default '{}',
   tags text[] not null default '{}',
+  -- Normalized "name|city" key used for de-duplication (computed by the app).
+  name_key text,
   is_customer boolean not null default false,
   -- Cached from the latest completed website audit (see trigger below).
   website_score int check (website_score between 0 and 100),
@@ -231,7 +233,7 @@ create index companies_ws_created_idx on public.companies (workspace_id, created
 create index companies_ws_domain_idx on public.companies (workspace_id, domain) where domain is not null;
 create index companies_ws_phone_idx on public.companies (workspace_id, phone_normalized) where phone_normalized is not null;
 create index companies_ws_email_idx on public.companies (workspace_id, lower(email)) where email is not null;
-create index companies_ws_name_city_idx on public.companies (workspace_id, lower(name), lower(coalesce(city, '')));
+create index companies_ws_name_key_idx on public.companies (workspace_id, name_key) where name_key is not null;
 create index companies_ws_sector_idx on public.companies (workspace_id, sector_id);
 create index companies_ws_city_idx on public.companies (workspace_id, city);
 create index companies_name_trgm_idx on public.companies using gin (name extensions.gin_trgm_ops);
