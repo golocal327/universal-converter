@@ -10,7 +10,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "db:test": "vitest run --config vitest.db.config.ts",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "db:types": "tsx scripts/gen-db-types.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
